@@ -12,7 +12,7 @@ public class App {
 
 		DiContainer.bind(ILogger.class, new JsonLogger());
 		DiContainer.bind(ITxtLogger.class, new TextLogger());
-
+		
 		appLuncher("medi.medi.MyApp","Zuper Zonic app");
 		appLuncher("medi.medi.MyApp","Hunter bPP");
 		
@@ -33,8 +33,6 @@ public class App {
 		} catch (Exception e) {
 			throw new Exception(" x_x Method run() is not found in "+ o.getClass().getSimpleName()+" x_x");
 		}
-		
-		
 	}
 
 	@SuppressWarnings("rawtypes")

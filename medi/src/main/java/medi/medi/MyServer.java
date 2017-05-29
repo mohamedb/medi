@@ -1,10 +1,10 @@
 package medi.medi;
 
 public class MyServer {
-	ILogger logger;
+	ITxtLogger logger;
 	String appName;
 
-	public MyServer(ILogger log, String appName) {
+	public MyServer(ITxtLogger log, String appName) {
 		super();
 		this.logger = log;
 		this.appName= appName;
