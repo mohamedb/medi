@@ -3,8 +3,9 @@ package medi.medi;
 public class MyApp {
 	ILogger logger;
 	String appName;
-
-	public MyApp(ILogger log, String appName) {
+	
+	@Medi
+	public MyApp(@Medi ILogger log, String appName) {
 		super();
 		this.logger = log;
 		this.appName= appName;

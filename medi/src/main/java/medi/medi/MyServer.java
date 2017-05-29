@@ -3,14 +3,15 @@ package medi.medi;
 public class MyServer {
 	ITxtLogger logger;
 	String appName;
-
-	public MyServer(ITxtLogger log, String appName) {
+    
+	@Medi
+	public MyServer(@Medi ITxtLogger log, String appName) {
 		super();
 		this.logger = log;
 		this.appName= appName;
 	}
 	
 	public void run(){
-		 this.logger.log(" The SERVER: "+this.appName+"  is starting"); 
+		 this.logger.log(" The SERVER: "+this.appName==null?"Null":this.appName+"  is starting"); 
 	}
 }
