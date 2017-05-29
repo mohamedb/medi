@@ -8,7 +8,6 @@ import java.util.Set;
 import org.reflections.Reflections;
 
 /**
- * Hello world!
  *
  */
 public class App {
@@ -17,7 +16,7 @@ public class App {
 		DiContainer.bind(ILogger.class, new JsonLogger());
 		DiContainer.bind(ITxtLogger.class, new TextLogger());
 
-		appLuncher(MyApp.class, new String[] { "Zuper Zonic app" });
+		appLuncher(MyApp.class, new String[] { "Zuper Zonic app", "PPZ" });
 		appLuncher(MyApp.class, new String[] { "Hunter bPP" });
 
 		appLuncher(MyServer.class, new String[] { "Apatz Zerver" });
@@ -78,7 +77,6 @@ public class App {
 				} else {
 					ctorAgs[i] = normalImp;
 				}
-
 				j++;
 			}
 			i++;
@@ -99,9 +97,6 @@ public class App {
 				Object ins= ((Class<?>) obj).newInstance();
 				System.out.println("...... Found impl.....: "+ins);
 				return ins;
-			}
-			else{
-				System.out.println("---Scanning--: "+obj);
 			}
 		}
 		return null;
