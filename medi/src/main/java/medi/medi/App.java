@@ -17,7 +17,8 @@ public class App {
 		appLuncher(MyApp.class, new String[] { "Zuper Zonic app" });
 		appLuncher(MyApp.class, new String[] { "Hunter bPP" });
 
-		appLuncher(MyServer.class, new String[] { "Apatz Zerver" });
+		appLuncher(MyServer.class , new String[] { "Apatz Zerver" });
+		appLuncher(MyMachine.class, new String[] { "POWER_MACHINE" });
 
 	}
 
@@ -48,13 +49,14 @@ public class App {
 	
 	/**
 	 * Build params by getting the right instance from the container and skip 'normal' type
-	 * Interface passed as param to constructor should be annotated and have a valid implementation registred to container
+	 * Interface passed as param to constructor should be annotated and have a valid implementation registered to container
+	 * otherArgs are additional params passed to luncher and are passed to constructor!
 	 * @param ctor
-	 * @param args
+	 * @param otherArgs
 	 * @return
 	 * @throws Exception
 	 */
-	public static Object[] buildParams(Constructor<?> ctor, Object[] args) throws Exception {
+	public static Object[] buildParams(Constructor<?> ctor, Object[] otherArgs) throws Exception {
 		Parameter[] params = ctor.getParameters();
 		int i = 0, j = 0;
 		Object[] ctorAgs = new Object[ctor.getParameterCount()];
@@ -62,8 +64,8 @@ public class App {
 			if (an.isAnnotationPresent(Medi.class)) {
 				Object impl = getTypeImpl(an.getType());
 			    ctorAgs[i]= impl;
-			} else if(j<args.length) {
-				ctorAgs[i] = args[j];
+			} else if(j<otherArgs.length) {
+				ctorAgs[i] = otherArgs[j];
 				j++;
 			}
 			i++;
