@@ -13,16 +13,16 @@ public class App {
 		DiContainer.bind(ILogger.class, new JsonLogger());
 		DiContainer.bind(ITxtLogger.class, new TextLogger());
 		
-		appLuncher("medi.medi.MyApp","Zuper Zonic app");
-		appLuncher("medi.medi.MyApp","Hunter bPP");
+		appLuncher(MyApp.class,"Zuper Zonic app");
+		appLuncher(MyApp.class,"Hunter bPP");
 		
-		appLuncher("medi.medi.MyServer","Apatz Zerver");
+		appLuncher(MyServer.class,"Apatz Zerver");
 
 	}
 
 	@SuppressWarnings("unchecked")
-	public static void appLuncher(String pckg,String appName) throws Exception {
-		Class<?> cl = Class.forName(pckg);
+	public static void appLuncher(Class<?> cl,String appName) throws Exception {
+//		Class<?> cl = Class.forName(pckg);
 		Class<?>[] ptypes= getConstructors(cl);
 		Constructor<?> cons = cl.getDeclaredConstructor(ptypes);
 		System.out.println("PC= "+cons.getParameterCount());
