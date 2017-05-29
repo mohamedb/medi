@@ -3,6 +3,9 @@ package medi.medi;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.Set;
+
+import org.reflections.Reflections;
 
 /**
  * Hello world!
@@ -17,7 +20,7 @@ public class App {
 		appLuncher(MyApp.class, new String[] { "Zuper Zonic app" });
 		appLuncher(MyApp.class, new String[] { "Hunter bPP" });
 
-		appLuncher(MyServer.class , new String[] { "Apatz Zerver" });
+		appLuncher(MyServer.class, new String[] { "Apatz Zerver" });
 		appLuncher(MyMachine.class, new String[] { "POWER_MACHINE" });
 
 	}
@@ -30,9 +33,10 @@ public class App {
 		method.invoke(o);
 
 	}
-	
+
 	/**
 	 * Get only the annotated constructor
+	 * 
 	 * @param aClass
 	 * @return
 	 */
@@ -46,11 +50,14 @@ public class App {
 		}
 		return null;
 	}
-	
+
 	/**
-	 * Build params by getting the right instance from the container and skip 'normal' type
-	 * Interface passed as param to constructor should be annotated and have a valid implementation registered to container
-	 * otherArgs are additional params passed to luncher and are passed to constructor!
+	 * Build params by getting the right instance from the container and skip
+	 * 'normal' type Interface passed as param to constructor should be
+	 * annotated and have a valid implementation registered to container
+	 * otherArgs are additional params passed to luncher and are passed to
+	 * constructor!
+	 * 
 	 * @param ctor
 	 * @param otherArgs
 	 * @return
@@ -63,9 +70,15 @@ public class App {
 		for (Parameter an : params) {
 			if (an.isAnnotationPresent(Medi.class)) {
 				Object impl = getTypeImpl(an.getType());
-			    ctorAgs[i]= impl;
-			} else if(j<otherArgs.length) {
-				ctorAgs[i] = otherArgs[j];
+				ctorAgs[i] = impl;
+			} else if (j < otherArgs.length) {
+				Object normalImp = findImplementation(an.getType()); 
+				if (normalImp == null) {
+					ctorAgs[i] = otherArgs[j];
+				} else {
+					ctorAgs[i] = normalImp;
+				}
+
 				j++;
 			}
 			i++;
@@ -75,5 +88,22 @@ public class App {
 
 	public static Object getTypeImpl(Class<?> type) throws Exception {
 		return DiContainer.resolve(type);
+	}
+
+	public static Object findImplementation(Class<?> type) throws InstantiationException, IllegalAccessException {
+		Reflections reflections = new Reflections("medi.medi");
+		Set<?> subTypes = reflections.getSubTypesOf(type);
+		System.out.println("Sub types of: "+ type+ " count: "+subTypes.size()+ " "+subTypes);
+		for (Object obj : subTypes) {
+			if (!obj.getClass().isInterface()) {
+				Object ins= ((Class<?>) obj).newInstance();
+				System.out.println("...... Found impl.....: "+ins);
+				return ins;
+			}
+			else{
+				System.out.println("---Scanning--: "+obj);
+			}
+		}
+		return null;
 	}
 }
