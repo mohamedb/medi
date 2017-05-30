@@ -7,10 +7,15 @@ import java.util.Set;
 
 import org.reflections.Reflections;
 
+import javassist.NotFoundException;
+import medi.medi.annot.Main;
+import medi.medi.annot.Medi;
+
 /**
  *
  */
 public class App {
+	public static final String BASE_PKG="medi.medi";
 	public static void main(String[] args) throws Exception {
 
 		DiContainer.bind(ILogger.class, new JsonLogger());
@@ -28,9 +33,17 @@ public class App {
 		Constructor<?> ctor = annotatedCtor(clazz);
 		Object[] ctorAgs = buildParams(ctor, args);
 		Object o = ctor.newInstance(ctorAgs);
-		Method method = o.getClass().getMethod("run");
+		Method method = findMain(clazz);
 		method.invoke(o);
-
+	}
+	
+	public static Method findMain(Class<?> clazz) throws NotFoundException{
+		for (Method m : clazz.getMethods()){
+			if(m.isAnnotationPresent(Main.class)){
+				return m;
+			}
+		}
+		throw new NotFoundException(" Class: "+clazz.getName()+ " doesn't contains an annotated method with @Main");
 	}
 
 	/**
@@ -68,25 +81,23 @@ public class App {
 		Object[] ctorAgs = new Object[ctor.getParameterCount()];
 		for (Parameter an : params) {
 			if (an.isAnnotationPresent(Medi.class)) {
-				Object impl = getTypeImpl(an.getType());
+				Object impl = getTypeImplementation(an.getType());
 				ctorAgs[i] = impl;
 			} else {
 				Object normalImp = findImplementation(an.getType()); 
 				if (normalImp == null && j < otherArgs.length) {
 					ctorAgs[i] = otherArgs[j];
-				    System.out.println(" normal type: >> "+ctorAgs[i]+ " << at posi: "+ i );
 				    j++;
 				} else {
 					ctorAgs[i] = normalImp;
 				}
-				
 			}
 			i++;
 		}
 		return ctorAgs;
 	}
 
-	public static Object getTypeImpl(Class<?> type) throws Exception {
+	public static Object getTypeImplementation(Class<?> type) throws Exception {
 		return DiContainer.resolve(type);
 	}
 	
@@ -98,13 +109,11 @@ public class App {
 	 * @throws IllegalAccessException
 	 */
 	public static Object findImplementation(Class<?> type) throws InstantiationException, IllegalAccessException {
-		Reflections reflections = new Reflections("medi.medi");
+		Reflections reflections = new Reflections(BASE_PKG);
 		Set<?> subTypes = reflections.getSubTypesOf(type);
-		System.out.println("Sub types of: "+ type+ " count: "+subTypes.size()+ " "+subTypes);
 		for (Object obj : subTypes) {
 			if (!obj.getClass().isInterface()) {
 				Object ins= ((Class<?>) obj).newInstance();
-				System.out.println("...... Found impl.....: "+ins);
 				return ins;
 			}
 		}

@@ -1,5 +1,8 @@
 package medi.medi;
 
+import medi.medi.annot.Main;
+import medi.medi.annot.Medi;
+
 public class MyApp {
 	ILogger logger;
 	String appName;
@@ -11,6 +14,7 @@ public class MyApp {
 		this.appName= appName;
 	}
 	
+	@Main
 	public void run(){
 		 this.logger.log(this.appName+" App is starting"); 
 	}

@@ -1,5 +1,7 @@
 package medi.medi;
 
+import medi.medi.annot.Main;
+import medi.medi.annot.Medi;
 
 public class MyMachine {
 	ILogger logger;
@@ -14,6 +16,7 @@ public class MyMachine {
 		this.appName= appName;
 	}
 	
+	@Main
 	public void run(){
 		 this.logger.log(this.appName+" Machine is booting!!"); 
 		 this.txtLogger.log("TXT-Logger is ready on machine");
