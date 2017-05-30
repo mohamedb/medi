@@ -70,14 +70,16 @@ public class App {
 			if (an.isAnnotationPresent(Medi.class)) {
 				Object impl = getTypeImpl(an.getType());
 				ctorAgs[i] = impl;
-			} else if (j < otherArgs.length) {
+			} else {
 				Object normalImp = findImplementation(an.getType()); 
-				if (normalImp == null) {
+				if (normalImp == null && j < otherArgs.length) {
 					ctorAgs[i] = otherArgs[j];
+				    System.out.println(" normal type: >> "+ctorAgs[i]+ " << at posi: "+ i );
+				    j++;
 				} else {
 					ctorAgs[i] = normalImp;
 				}
-				j++;
+				
 			}
 			i++;
 		}
@@ -87,7 +89,14 @@ public class App {
 	public static Object getTypeImpl(Class<?> type) throws Exception {
 		return DiContainer.resolve(type);
 	}
-
+	
+	/**
+	 * Try to find an implementation 
+	 * @param type
+	 * @return
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
 	public static Object findImplementation(Class<?> type) throws InstantiationException, IllegalAccessException {
 		Reflections reflections = new Reflections("medi.medi");
 		Set<?> subTypes = reflections.getSubTypesOf(type);

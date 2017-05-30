@@ -7,7 +7,7 @@ public class MyMachine {
 	ITxtLogger txtLogger;
 	
 	@Medi
-	public MyMachine(@Medi ILogger log, ITxtLogger txtLogger, String appName ) {
+	public MyMachine(@Medi ILogger log, String appName,ITxtLogger txtLogger) {
 		super();
 		this.logger = log;
 		this.txtLogger= txtLogger;
