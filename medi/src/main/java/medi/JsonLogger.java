@@ -1,4 +1,4 @@
-package medi.medi;
+package medi;
 
 public class JsonLogger implements ILogger {
 

@@ -1,4 +1,4 @@
-package medi.medi;
+package medi;
 
 import java.util.HashMap;
 import java.util.Map;

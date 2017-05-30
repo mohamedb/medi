@@ -1,7 +1,7 @@
-package medi.medi;
+package medi;
 
-import medi.medi.annot.Main;
-import medi.medi.annot.Medi;
+import medi.annot.Main;
+import medi.annot.Medi;
 
 public class MyServer {
 	ITxtLogger logger;

@@ -1,4 +1,4 @@
-package medi.medi;
+package medi;
 
 public class TextLogger implements ITxtLogger {
 

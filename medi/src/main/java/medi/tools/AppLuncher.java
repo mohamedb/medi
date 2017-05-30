@@ -1,4 +1,4 @@
-package medi.medi;
+package medi.tools;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -8,28 +8,14 @@ import java.util.Set;
 import org.reflections.Reflections;
 
 import javassist.NotFoundException;
-import medi.medi.annot.Main;
-import medi.medi.annot.Medi;
+import medi.App;
+import medi.DiContainer;
+import medi.annot.Main;
+import medi.annot.Medi;
 
-/**
- *
- */
-public class App {
-	public static final String BASE_PKG="medi.medi";
-	public static void main(String[] args) throws Exception {
+public class AppLuncher {
 
-		DiContainer.bind(ILogger.class, new JsonLogger());
-		DiContainer.bind(ITxtLogger.class, new TextLogger());
-
-		appLuncher(MyApp.class, new String[] { "Zuper Zonic app", "PPZ" });
-		appLuncher(MyApp.class, new String[] { "Hunter bPP" });
-
-		appLuncher(MyServer.class, new String[] { "Apatz Zerver" });
-		appLuncher(MyMachine.class, new String[] { "POWER_MACHINE" });
-
-	}
-
-	public static void appLuncher(Class<?> clazz, Object[] args) throws Exception {
+	public static void lunch(Class<?> clazz, Object[] args) throws Exception {
 		Constructor<?> ctor = annotatedCtor(clazz);
 		Object[] ctorAgs = buildParams(ctor, args);
 		Object o = ctor.newInstance(ctorAgs);
@@ -109,7 +95,7 @@ public class App {
 	 * @throws IllegalAccessException
 	 */
 	public static Object findImplementation(Class<?> type) throws InstantiationException, IllegalAccessException {
-		Reflections reflections = new Reflections(BASE_PKG);
+		Reflections reflections = new Reflections(App.BASE_PKG);
 		Set<?> subTypes = reflections.getSubTypesOf(type);
 		for (Object obj : subTypes) {
 			if (!obj.getClass().isInterface()) {
